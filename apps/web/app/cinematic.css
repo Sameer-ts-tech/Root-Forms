@@ -1,0 +1,212 @@
+/* ==========================================================================
+   FORM ROOTS — Cinematic Forest Animation
+   ========================================================================== */
+
+/* Preloader Section */
+.section_preloader {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 1.0s cubic-bezier(0.76, 0, 0.24, 1), visibility 1.0s;
+  visibility: visible;
+}
+
+.pre_loader {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader_gif {
+  width: 55px;
+  height: auto;
+  display: block;
+}
+
+/* Hide preloader when loaded */
+body.is-loaded .section_preloader {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Cinematic Opening Section */
+.section_opening {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 10;
+  pointer-events: none;
+  background-color: #0d1b12; /* Forest BG */
+  transition: opacity 2s ease-in-out;
+}
+
+/* Forest Background */
+.hero-forest-bkgrnd {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  background-image: url("/assets/website-background.jpg");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform: translate(-50%, -50%) scale(1.02);
+  transition: transform 20.5s cubic-bezier(0.1, 0.8, 0.2, 1);
+  z-index: 11;
+}
+
+body.is-loaded .hero-forest-bkgrnd {
+  transform: translate(-50%, -50%) scale(2);
+}
+
+/* Clouds Layer */
+.hero-cloud {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 20;
+  opacity: 0.95;
+  transform: translate(0, 0) scale(1.02);
+  transition: transform 4.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 4.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+body.is-loaded .hero-cloud {
+  transition-delay: 0.8s;
+}
+
+/* Top Left Cloud */
+.hero-cloud-top-left {
+  transform: translate(0, 0) scale(1.02);
+}
+body.is-loaded .hero-cloud-top-left {
+  transform: translate(-65%, -65%) scale(1.4);
+  opacity: 0;
+}
+
+/* Bottom Right Cloud */
+.hero-cloud-bottom-right {
+  transform: translate(0, 0) scale(1.02);
+}
+body.is-loaded .hero-cloud-bottom-right {
+  transform: translate(65%, 65%) scale(1.4);
+  opacity: 0;
+}
+
+/* Small central clouds */
+.hero-cloud-cover_small {
+  transform: scale(1.02);
+}
+body.is-loaded .hero-cloud-cover_small {
+  transform: scale(2.0);
+  opacity: 0;
+}
+
+/* Large central clouds */
+.hero-cloud-cover_big {
+  transform: scale(1.02);
+}
+body.is-loaded .hero-cloud-cover_big {
+  transform: scale(2.5);
+  opacity: 0;
+}
+
+/* Cinematic Mist Overlay */
+.hero-floor-bkgrnd {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.hero-floor-mist-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40vh;
+  background: linear-gradient(to bottom, rgba(18, 21, 19, 0.95) 0%, rgba(18, 21, 19, 0) 100%);
+  opacity: 0.85;
+}
+
+.hero-floor-mist-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50vh;
+  background: linear-gradient(to top, rgba(18, 21, 19, 1) 0%, rgba(18, 21, 19, 0.4) 60%, rgba(18, 21, 19, 0) 100%);
+  opacity: 0.9;
+}
+
+/* Drifting Dust Particles */
+.particle_section {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 18;
+  opacity: 0;
+  transition: opacity 4s ease-in-out;
+  transition-delay: 1.8s;
+}
+
+body.is-loaded .particle_section {
+  opacity: 0.6;
+}
+
+.particles {
+  width: 100%;
+  height: 200%;
+  background-image: url('/assets/particles.png');
+  background-position: center top;
+  background-size: cover;
+  animation: driftParticles 30s linear infinite;
+}
+
+@keyframes driftParticles {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+/* Main Content Wrapper - Fade in */
+.section_home_content {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  z-index: 30;
+  display: block;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 2.2s cubic-bezier(0.16, 1, 0.3, 1), transform 2.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 2.3s;
+}
+
+body.is-loaded .section_home_content {
+  opacity: 1;
+  transform: translateY(0);
+}
