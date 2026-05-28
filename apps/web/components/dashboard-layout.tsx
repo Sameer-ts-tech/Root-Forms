@@ -17,13 +17,17 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter();
     const { user } = useUser();
 
-    const logout = trpc.auth.getLoggedInUserInfo.useQuery(undefined, { enabled: false });
+    const signoutMutation = trpc.auth.signout.useMutation();
 
-    const handleLogout = () => {
-        // Clear cookie via API
-        fetch(`${env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/trpc"}/auth.signout`, { method: "POST", credentials: "include" })
-            .catch(() => {})
-            .finally(() => router.push("/signin"));
+    const handleLogout = async () => {
+        try {
+            await signoutMutation.mutateAsync();
+        } catch (e) {
+            console.error(e);
+        } finally {
+            // Hard redirect to '/' to clear all TRPC caches and state
+            window.location.href = "/";
+        }
     };
 
     return (
