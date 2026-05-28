@@ -1,14 +1,12 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
 import { CheckCircle2, Leaf, X } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { useUser } from "~/hooks/api/auth";
 import { useRouter } from "next/navigation";
 
-export const metadata: Metadata = {
-    title: "Pricing",
-    description: "Simple, transparent pricing for Root Forms. Start free, upgrade when you need more.",
-};
+
 
 const plans = [
     {
