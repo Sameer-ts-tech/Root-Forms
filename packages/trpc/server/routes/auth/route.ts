@@ -15,7 +15,7 @@ import { generatePath } from "../../utils/path-generator";
 const getPath = generatePath("/authentication");
 const TAGS = ["Authentication"];
 
-const isProd = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "prod";
+const isProd = process.env.NODE_ENV === "production" || (process.env.NODE_ENV as string) === "prod";
 
 export const authRouter = router({
     createUserWithEmailAndPassword: publicProcedure
