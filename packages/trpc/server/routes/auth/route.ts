@@ -1,4 +1,5 @@
 import { authenticatedProcedure, publicProcedure, router } from "../../trpc";
+import { z } from "zod";
 import {
     createUserWithEmailAndPasswordInputModel,
     createUserWithEmailAndPasswordOutputModel,
@@ -13,6 +14,8 @@ import { userService } from "../../services";
 import { generatePath } from "../../utils/path-generator";
 const getPath = generatePath("/authentication");
 const TAGS = ["Authentication"];
+
+const isProd = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "prod";
 
 export const authRouter = router({
     createUserWithEmailAndPassword: publicProcedure
@@ -36,8 +39,8 @@ export const authRouter = router({
 
             ctx.setCookie("token", token, {
                 httpOnly: true,
-                secure: false,
-                sameSite: "strict",
+                secure: isProd,
+                sameSite: isProd ? "none" : "strict",
                 maxAge: 30 * 24 * 60 * 60 * 1000,
             });
 
@@ -65,8 +68,8 @@ export const authRouter = router({
 
             ctx.setCookie("token", token, {
                 httpOnly: true,
-                secure: false,
-                sameSite: "strict",
+                secure: isProd,
+                sameSite: isProd ? "none" : "strict",
                 maxAge: 30 * 24 * 60 * 60 * 1000,
             });
 
@@ -92,5 +95,24 @@ export const authRouter = router({
                 fullName,
                 email,
             };
+        }),
+    signout: publicProcedure
+        .meta({
+            openapi: {
+                method: "POST",
+                path: getPath("/signout"),
+                tags: TAGS,
+            },
+        })
+        .input(z.void())
+        .output(z.boolean())
+        .mutation(async ({ ctx }) => {
+            ctx.setCookie("token", "", {
+                httpOnly: true,
+                secure: isProd,
+                sameSite: isProd ? "none" : "strict",
+                maxAge: 0,
+            });
+            return true;
         }),
 });
