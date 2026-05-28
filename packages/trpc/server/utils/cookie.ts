@@ -8,6 +8,10 @@ export function getCookie(req: Request, name: string): string | undefined {
     return req.cookies?.[name];
 }
 
-export function clearCookie(res: Response, name: string) {
-    res.clearCookie(name);
+export function clearCookie(res: Response, name: string, opts?: CookieOptions) {
+    if (opts) {
+        res.clearCookie(name, opts);
+    } else {
+        res.clearCookie(name);
+    }
 }

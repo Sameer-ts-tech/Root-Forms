@@ -14,7 +14,7 @@ export interface TRPCCtxUser {
 export interface TRPCContext {
     setCookie: (name: string, value: string, opts: CookieOptions) => void;
     getCookie: (name: string) => string | undefined;
-    clearCookie: (name: string) => void;
+    clearCookie: (name: string, opts?: CookieOptions) => void;
 
     user?: TRPCCtxUser;
 }
@@ -27,8 +27,8 @@ export async function createContext({ req, res }: CreateExpressContextOptions) {
         getCookie(name: string) {
             return getCookieUtil(req, name);
         },
-        clearCookie(name: string) {
-            return clearCookieUtil(res, name);
+        clearCookie(name: string, opts?: CookieOptions) {
+            return clearCookieUtil(res, name, opts);
         },
 
         user: undefined,

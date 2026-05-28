@@ -41,6 +41,7 @@ export const authRouter = router({
                 httpOnly: true,
                 secure: isProd,
                 sameSite: isProd ? "none" : "strict",
+                path: "/",
                 maxAge: 30 * 24 * 60 * 60 * 1000,
             });
 
@@ -70,6 +71,7 @@ export const authRouter = router({
                 httpOnly: true,
                 secure: isProd,
                 sameSite: isProd ? "none" : "strict",
+                path: "/",
                 maxAge: 30 * 24 * 60 * 60 * 1000,
             });
 
@@ -107,11 +109,11 @@ export const authRouter = router({
         .input(z.void())
         .output(z.boolean())
         .mutation(async ({ ctx }) => {
-            ctx.setCookie("token", "", {
+            ctx.clearCookie("token", {
                 httpOnly: true,
                 secure: isProd,
                 sameSite: isProd ? "none" : "strict",
-                maxAge: 0,
+                path: "/",
             });
             return true;
         }),
