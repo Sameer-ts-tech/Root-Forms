@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "~/hooks/api/auth";
 import { Leaf, LayoutDashboard, FileText, Globe, LogOut, Settings, ChevronRight } from "lucide-react";
 import { trpc } from "~/trpc/client";
+import { env } from "~/env.js";
 
 const navItems = [
     { label: "My Forms", href: "/dashboard/forms", icon: FileText },
@@ -20,7 +21,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
     const handleLogout = () => {
         // Clear cookie via API
-        fetch("http://localhost:8000/trpc/auth.signout", { method: "POST", credentials: "include" })
+        fetch(`${env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/trpc"}/auth.signout`, { method: "POST", credentials: "include" })
             .catch(() => {})
             .finally(() => router.push("/signin"));
     };

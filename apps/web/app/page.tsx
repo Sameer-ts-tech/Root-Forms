@@ -23,6 +23,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { env } from "~/env.js";
 import "./cinematic.css";
 
 const WateringCanScene = dynamic(() => import("~/components/watering-can-scene"), { ssr: false });
@@ -218,7 +219,7 @@ export default function LandingPage() {
                 <div className="hidden md:flex items-center gap-8">
                     <Link href="/explore" className="text-sm text-white/60 hover:text-white transition-colors">Explore</Link>
                     <Link href="/pricing" className="text-sm text-white/60 hover:text-white transition-colors">Pricing</Link>
-                    <Link href="http://localhost:8000/docs" target="_blank" className="text-sm text-white/60 hover:text-white transition-colors">API Docs</Link>
+                    <Link href={env.NEXT_PUBLIC_API_URL?.replace("/trpc", "/docs") ?? "http://localhost:8000/docs"} target="_blank" className="text-sm text-white/60 hover:text-white transition-colors">API Docs</Link>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -525,7 +526,7 @@ export default function LandingPage() {
                     <div className="flex items-center gap-8">
                         <Link href="/explore" className="text-sm text-white/50 hover:text-white">Explore</Link>
                         <Link href="/pricing" className="text-sm text-white/50 hover:text-white">Pricing</Link>
-                        <Link href="http://localhost:8000/docs" target="_blank" className="text-sm text-white/50 hover:text-white">API Docs</Link>
+                        <Link href={env.NEXT_PUBLIC_API_URL?.replace("/trpc", "/docs") ?? "http://localhost:8000/docs"} target="_blank" className="text-sm text-white/50 hover:text-white">API Docs</Link>
                         <Link href="/dashboard/forms" className="text-sm text-white/50 hover:text-white">Dashboard</Link>
                     </div>
 

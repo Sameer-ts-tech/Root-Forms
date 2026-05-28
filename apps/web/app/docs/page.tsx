@@ -2,6 +2,7 @@ import { DashboardLayout } from "~/components/dashboard-layout";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
+import { env } from "~/env.js";
 
 export default function DocsPage() {
     return (
@@ -15,16 +16,16 @@ export default function DocsPage() {
                         </span>
                     </div>
                     <Button asChild size="sm" variant="ghost" className="text-white/60 hover:text-white gap-2">
-                        <a href="http://localhost:8000/docs" target="_blank" rel="noreferrer">
+                        <a href={env.NEXT_PUBLIC_API_URL?.replace("/trpc", "/docs") ?? "http://localhost:8000/docs"} target="_blank" rel="noreferrer">
                             Open in new tab
                             <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                     </Button>
                 </div>
                 <div className="flex-1 bg-white">
-                    {/* The API server is running on port 8000 */}
+                    {/* The API server is running on port 8000 in dev */}
                     <iframe
-                        src="http://localhost:8000/docs"
+                        src={env.NEXT_PUBLIC_API_URL?.replace("/trpc", "/docs") ?? "http://localhost:8000/docs"}
                         className="w-full h-full border-0"
                         title="Root Forms API Documentation"
                     />
