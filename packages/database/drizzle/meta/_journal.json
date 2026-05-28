@@ -29,6 +29,13 @@
       "when": 1779797277444,
       "tag": "0003_exotic_the_hunter",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1779968271680,
+      "tag": "0004_rainy_phantom_reporter",
+      "breakpoints": true
     }
   ]
 }

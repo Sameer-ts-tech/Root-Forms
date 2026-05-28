@@ -1,0 +1,2 @@
+CREATE TYPE "public"."form_display_mode_enum" AS ENUM('one_at_a_time', 'all_at_once');--> statement-breakpoint
+ALTER TABLE "forms" ADD COLUMN "display_mode" "form_display_mode_enum" DEFAULT 'one_at_a_time' NOT NULL;
