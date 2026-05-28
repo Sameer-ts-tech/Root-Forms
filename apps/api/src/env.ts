@@ -9,12 +9,7 @@ const envSchema = z.object({
 
 function createEnv(env: NodeJS.ProcessEnv) {
     const safeParseResult = envSchema.safeParse(env);
-    if (!safeParseResult.success) {
-        console.error("ENVIRONMENT VARIABLE ERROR (API):");
-        console.error(JSON.stringify(safeParseResult.error.issues, null, 2));
-        console.error("Available ENV KEYS:", Object.keys(process.env).join(", "));
-        throw new Error(safeParseResult.error.message);
-    }
+    if (!safeParseResult.success) throw new Error(safeParseResult.error.message);
     return safeParseResult.data;
 }
 

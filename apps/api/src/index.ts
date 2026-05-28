@@ -1,8 +1,3 @@
-process.on('uncaughtException', (err) => {
-  console.error("FATAL UNCAUGHT EXCEPTION:", err);
-  process.exit(1);
-});
-
 import http from "node:http";
 import { logger } from "@repo/logger";
 import { app as expressApplication } from "./server";
