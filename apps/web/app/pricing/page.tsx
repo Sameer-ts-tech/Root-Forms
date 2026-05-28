@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2, Leaf, X } from "lucide-react";
 import { Button } from "~/components/ui/button";
+import { useUser } from "~/hooks/api/auth";
+import { useRouter } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Pricing",
@@ -92,6 +94,9 @@ const plans = [
 ];
 
 export default function PricingPage() {
+    const { user } = useUser();
+    const router = useRouter();
+
     return (
         <div className="min-h-screen" style={{ background: "#060e09" }}>
             {/* Background */}
@@ -109,11 +114,22 @@ export default function PricingPage() {
                 </Link>
                 <div className="flex gap-4">
                     <Button variant="ghost" asChild className="text-white/70">
-                        <Link href="/signin">Sign in</Link>
+                        <Link href="/pricing">Pricing</Link>
                     </Button>
-                    <Button asChild style={{ background: "linear-gradient(135deg, #52b788, #40916c)", color: "#0d1b12" }}>
-                        <Link href="/signup">Get Started</Link>
-                    </Button>
+                    {user?.id ? (
+                        <Button onClick={() => router.push("/dashboard/forms")} style={{ background: "linear-gradient(135deg, #52b788, #40916c)", color: "#0d1b12" }}>
+                            Dashboard
+                        </Button>
+                    ) : (
+                        <>
+                            <Button variant="ghost" asChild className="text-white/70">
+                                <Link href="/signin">Sign in</Link>
+                            </Button>
+                            <Button asChild style={{ background: "linear-gradient(135deg, #52b788, #40916c)", color: "#0d1b12" }}>
+                                <Link href="/signup">Get Started</Link>
+                            </Button>
+                        </>
+                    )}
                 </div>
             </nav>
 

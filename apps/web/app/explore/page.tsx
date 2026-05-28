@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useGetPublicForms } from "~/hooks/api/form";
+import { useUser } from "~/hooks/api/auth";
 import { Leaf, Globe, MessageSquare, ArrowRight, Search } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const themeColors: Record<string, { bg: string; border: string; accent: string; text: string }> = {
     forest: { bg: "#0d1b12", border: "#2d6a4f", accent: "#52b788", text: "#d8f3dc" },
@@ -24,6 +26,8 @@ const themeEmoji: Record<string, string> = {
 };
 
 export default function ExplorePage() {
+    const { user } = useUser();
+    const router = useRouter();
     const { forms, isLoading } = useGetPublicForms();
     const [search, setSearch] = useState("");
 
@@ -50,14 +54,26 @@ export default function ExplorePage() {
                 </Link>
                 <div className="flex items-center gap-4">
                     <Link href="/pricing" className="text-sm text-white/60 hover:text-white">Pricing</Link>
-                    <Link href="/signin" className="text-sm text-white/60 hover:text-white">Sign in</Link>
-                    <Link
-                        href="/signup"
-                        className="text-sm font-medium px-4 py-2 rounded-lg"
-                        style={{ background: "linear-gradient(135deg, #52b788, #40916c)", color: "#0d1b12" }}
-                    >
-                        Get Started
-                    </Link>
+                    {user?.id ? (
+                        <button
+                            onClick={() => router.push("/dashboard/forms")}
+                            className="text-sm font-medium px-4 py-2 rounded-lg"
+                            style={{ background: "linear-gradient(135deg, #52b788, #40916c)", color: "#0d1b12" }}
+                        >
+                            Dashboard
+                        </button>
+                    ) : (
+                        <>
+                            <Link href="/signin" className="text-sm text-white/60 hover:text-white">Sign in</Link>
+                            <Link
+                                href="/signup"
+                                className="text-sm font-medium px-4 py-2 rounded-lg"
+                                style={{ background: "linear-gradient(135deg, #52b788, #40916c)", color: "#0d1b12" }}
+                            >
+                                Get Started
+                            </Link>
+                        </>
+                    )}
                 </div>
             </nav>
 
