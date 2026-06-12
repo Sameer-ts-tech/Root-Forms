@@ -88,7 +88,14 @@ export default function LandingPage() {
     const { user } = useUser();
     const router = useRouter();
     const audioRef = useRef<HTMLAudioElement>(null);
-    const [entered, setEntered] = useState(false);
+    // Check sessionStorage so the watering animation only plays once per session.
+    // On return visits (e.g. after logout) we skip straight to the landing page.
+    const [entered, setEntered] = useState<boolean>(() => {
+        if (typeof window !== "undefined") {
+            return sessionStorage.getItem("rf_entered") === "true";
+        }
+        return false;
+    });
     const [muted, setMuted] = useState(false);
     const [isWatering, setIsWatering] = useState(false);
 
@@ -119,6 +126,7 @@ export default function LandingPage() {
     };
 
     const handleWatered = () => {
+        sessionStorage.setItem("rf_entered", "true");
         setEntered(true);
     };
 

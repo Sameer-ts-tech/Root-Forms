@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "~/hooks/api/auth";
-import { Leaf, LayoutDashboard, FileText, Globe, LogOut, Settings, ChevronRight } from "lucide-react";
+import { Leaf, FileText, Globe, LogOut, Settings } from "lucide-react";
 import { trpc } from "~/trpc/client";
 import { env } from "~/env.js";
 
@@ -15,7 +16,15 @@ const navItems = [
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const router = useRouter();
-    const { user } = useUser();
+    const { user, isFetched } = useUser();
+    const utils = trpc.useUtils();
+
+    // Auth guard: redirect to signin if user is not authenticated
+    useEffect(() => {
+        if (isFetched && !user) {
+            router.replace("/signin");
+        }
+    }, [isFetched, user, router]);
 
     const signoutMutation = trpc.auth.signout.useMutation();
 
@@ -25,8 +34,9 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         } catch (e) {
             console.error(e);
         } finally {
-            // Hard redirect to '/' to clear all TRPC caches and state
-            window.location.href = "/";
+            // Invalidate user cache so the navbar updates immediately
+            await utils.auth.getLoggedInUserInfo.invalidate();
+            router.push("/");
         }
     };
 
