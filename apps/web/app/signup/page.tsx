@@ -4,6 +4,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { useSignup } from "~/hooks/api/auth";
 import { Button } from "~/components/ui/button";
@@ -31,64 +32,94 @@ export default function SignupPage() {
     };
 
     return (
-        <main className="min-h-screen bg-black text-white flex items-center justify-center px-4">
-            <form
-                onSubmit={handleSubmit}
-                className="w-full max-w-sm space-y-5 rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur"
-            >
-                <div className="space-y-1">
-                    <h1 className="text-2xl font-semibold tracking-tight">Create account</h1>
-                    <p className="text-sm text-white/60">
-                        Register with your name, email, and password.
+        <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-4 py-12 sm:px-6 lg:px-8">
+            {/* Background Effects */}
+            <div className="absolute inset-0">
+                <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-blue-500/20 blur-[120px]" />
+                <div className="absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-purple-500/20 blur-[120px]" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[800px] w-[800px] rounded-full bg-white/5 blur-[100px]" />
+            </div>
+
+            <div className="relative z-10 w-full max-w-md space-y-8">
+                <div className="text-center">
+                    <h1 className="text-4xl font-extrabold tracking-tight text-white lg:text-5xl">
+                        Create an account
+                    </h1>
+                    <p className="mt-4 text-lg text-white/60">
+                        Join us to start building amazing forms
                     </p>
                 </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="fullName">Full name</Label>
-                    <Input
-                        id="fullName"
-                        value={fullName}
-                        onChange={(event) => setFullName(event.target.value)}
-                        placeholder="Jane Doe"
-                        className="bg-black/40 border-white/10 text-white placeholder:text-white/30"
-                    />
+                <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl sm:p-10">
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="fullName" className="text-sm font-medium text-white/80">Full name</Label>
+                                <Input
+                                    id="fullName"
+                                    value={fullName}
+                                    onChange={(event) => setFullName(event.target.value)}
+                                    placeholder="Jane Doe"
+                                    className="h-12 border-white/10 bg-black/40 px-4 text-white placeholder:text-white/30 focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all"
+                                    required
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="email" className="text-sm font-medium text-white/80">Email</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(event) => setEmail(event.target.value)}
+                                    placeholder="jane@example.com"
+                                    className="h-12 border-white/10 bg-black/40 px-4 text-white placeholder:text-white/30 focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all"
+                                    required
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="password" className="text-sm font-medium text-white/80">Password</Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    value={password}
+                                    onChange={(event) => setPassword(event.target.value)}
+                                    placeholder="••••••••"
+                                    className="h-12 border-white/10 bg-black/40 px-4 text-white placeholder:text-white/30 focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        {error ? (
+                            <div className="rounded-lg bg-red-500/10 p-4 border border-red-500/20">
+                                <p className="text-sm text-red-400 text-center font-medium">{error.message}</p>
+                            </div>
+                        ) : null}
+                        {isSuccess ? (
+                            <div className="rounded-lg bg-emerald-500/10 p-4 border border-emerald-500/20">
+                                <p className="text-sm text-emerald-400 text-center font-medium">Account created.</p>
+                            </div>
+                        ) : null}
+
+                        <Button
+                            type="submit"
+                            className="h-12 w-full bg-white text-base font-semibold text-black hover:bg-white/90 transition-colors mt-2"
+                            disabled={isPending}
+                        >
+                            {isPending ? "Creating account..." : "Sign up"}
+                        </Button>
+                    </form>
+
+                    <p className="mt-8 text-center text-sm text-white/60">
+                        Already have an account?{" "}
+                        <Link href="/signin" className="font-semibold text-white hover:text-white/80 transition-colors">
+                            Sign in
+                        </Link>
+                    </p>
                 </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        placeholder="jane@example.com"
-                        className="bg-black/40 border-white/10 text-white placeholder:text-white/30"
-                    />
-                </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
-                    <Input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        placeholder="••••••••"
-                        className="bg-black/40 border-white/10 text-white placeholder:text-white/30"
-                    />
-                </div>
-
-                {error ? <p className="text-sm text-red-400">{error.message}</p> : null}
-                {isSuccess ? <p className="text-sm text-emerald-400">Account created.</p> : null}
-
-                <Button
-                    type="submit"
-                    className="w-full bg-white text-black hover:bg-white/90"
-                    disabled={isPending}
-                >
-                    {isPending ? "Registering..." : "Register"}
-                </Button>
-            </form>
+            </div>
         </main>
     );
 }
