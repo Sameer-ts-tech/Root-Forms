@@ -33,9 +33,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         } catch (e) {
             console.error(e);
         } finally {
-            // Redirect to signin after logout. Using window.location to fully
-            // clear all React Query in-memory cache so no stale auth data remains.
-            window.location.href = "/signin";
+            // Flag the logged-out state so the landing page navbar renders
+            // Sign in + Get Started immediately without waiting for the query.
+            localStorage.setItem("rf_logged_out", "1");
+            window.location.href = "/";
         }
     };
 

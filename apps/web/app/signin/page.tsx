@@ -26,6 +26,7 @@ export default function SigninPage() {
             password,
         });
 
+        localStorage.removeItem("rf_logged_out");
         // Hard navigate so React Query starts fresh with the authenticated cookie
         window.location.href = "/dashboard/forms";
     };
@@ -41,6 +42,7 @@ export default function SigninPage() {
             password: demoPassword,
         });
         
+        localStorage.removeItem("rf_logged_out");
         // Hard navigate so React Query starts fresh with the authenticated cookie
         window.location.href = "/dashboard/forms";
     };

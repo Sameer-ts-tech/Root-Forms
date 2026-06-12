@@ -85,8 +85,18 @@ const stats = [
 ];
 
 export default function LandingPage() {
-    const { user, isFetched, isLoading } = useUser();
+    const { user, isFetched } = useUser();
     const router = useRouter();
+
+    // Read localStorage flag set by logout handler — gives us an instant
+    // hint that the user logged out so we don't flash the Dashboard button
+    // while the useUser() query is still in-flight.
+    const [loggedOutHint, setLoggedOutHint] = useState<boolean>(() => {
+        if (typeof window !== "undefined") {
+            return localStorage.getItem("rf_logged_out") === "1";
+        }
+        return false;
+    });
     const audioRef = useRef<HTMLAudioElement>(null);
     // Check sessionStorage so the watering animation only plays once per session.
     // On return visits (e.g. after logout) we skip straight to the landing page.
@@ -117,6 +127,14 @@ export default function LandingPage() {
             document.body.classList.remove("is-loaded");
         };
     }, [entered]);
+
+    // Once the query confirms the user is gone, clear the logout hint flag
+    useEffect(() => {
+        if (isFetched && !user && loggedOutHint) {
+            localStorage.removeItem("rf_logged_out");
+            setLoggedOutHint(false);
+        }
+    }, [isFetched, user, loggedOutHint]);
 
     const toggleMute = () => {
         if (audioRef.current) {
@@ -231,10 +249,7 @@ export default function LandingPage() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    {isLoading || !isFetched ? (
-                        // Placeholder while auth state is loading — prevents flashing stale buttons
-                        <div className="w-24 h-9 rounded-md bg-white/5 animate-pulse" />
-                    ) : user?.id ? (
+                    {user?.id && !loggedOutHint ? (
                         <Button
                             onClick={() => router.push("/dashboard/forms")}
                             className="text-sm font-medium"
