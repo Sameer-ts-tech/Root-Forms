@@ -109,11 +109,15 @@ export const authRouter = router({
         .input(z.void())
         .output(z.boolean())
         .mutation(async ({ ctx }) => {
-            ctx.clearCookie("token", {
+            // Clear with matching options. maxAge: 0 and expires in the past
+            // ensures the cookie is removed in all browsers/environments.
+            ctx.setCookie("token", "", {
                 httpOnly: true,
                 secure: isProd,
                 sameSite: isProd ? "none" : "strict",
                 path: "/",
+                maxAge: 0,
+                expires: new Date(0),
             });
             return true;
         }),

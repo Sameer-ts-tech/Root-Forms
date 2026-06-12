@@ -33,9 +33,9 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         } catch (e) {
             console.error(e);
         } finally {
-            // Hard reload to fully wipe all in-memory React Query cache.
-            // A soft router.push would leave stale user data in memory.
-            window.location.href = "/";
+            // Redirect to signin after logout. Using window.location to fully
+            // clear all React Query in-memory cache so no stale auth data remains.
+            window.location.href = "/signin";
         }
     };
 

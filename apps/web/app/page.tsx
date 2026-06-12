@@ -85,7 +85,7 @@ const stats = [
 ];
 
 export default function LandingPage() {
-    const { user } = useUser();
+    const { user, isFetched, isLoading } = useUser();
     const router = useRouter();
     const audioRef = useRef<HTMLAudioElement>(null);
     // Check sessionStorage so the watering animation only plays once per session.
@@ -231,7 +231,10 @@ export default function LandingPage() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    {user?.id ? (
+                    {isLoading || !isFetched ? (
+                        // Placeholder while auth state is loading — prevents flashing stale buttons
+                        <div className="w-24 h-9 rounded-md bg-white/5 animate-pulse" />
+                    ) : user?.id ? (
                         <Button
                             onClick={() => router.push("/dashboard/forms")}
                             className="text-sm font-medium"
