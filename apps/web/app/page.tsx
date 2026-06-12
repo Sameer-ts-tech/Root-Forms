@@ -259,7 +259,7 @@ export default function LandingPage() {
                         </Button>
                     ) : (
                         <>
-                            <Button variant="ghost" onClick={() => router.push("/signin")} className="text-white/70 hover:text-black cursor-pointer text-sm">
+                            <Button variant="ghost" onClick={() => router.push("/signin")} className="text-white/70 hover:text-white cursor-pointer text-sm">
                                 Sign in
                             </Button>
                             <Button

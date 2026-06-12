@@ -3,31 +3,24 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { useSignin } from "~/hooks/api/auth";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Leaf, Trees, Sprout } from "lucide-react";
 
 export default function SigninPage() {
-    const router = useRouter();
-    const { signInUserWithEmailAndPasswordAsync, isPending, isSuccess, error } = useSignin();
+    const { signInUserWithEmailAndPasswordAsync, isPending, error } = useSignin();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
-        await signInUserWithEmailAndPasswordAsync({
-            email,
-            password,
-        });
-
+        await signInUserWithEmailAndPasswordAsync({ email, password });
         localStorage.removeItem("rf_logged_out");
-        // Hard navigate so React Query starts fresh with the authenticated cookie
         window.location.href = "/dashboard/forms";
     };
 
@@ -36,111 +29,228 @@ export default function SigninPage() {
         const demoPassword = "Demo@12345";
         setEmail(demoEmail);
         setPassword(demoPassword);
-        
-        await signInUserWithEmailAndPasswordAsync({
-            email: demoEmail,
-            password: demoPassword,
-        });
-        
+        await signInUserWithEmailAndPasswordAsync({ email: demoEmail, password: demoPassword });
         localStorage.removeItem("rf_logged_out");
-        // Hard navigate so React Query starts fresh with the authenticated cookie
         window.location.href = "/dashboard/forms";
     };
 
     return (
-        <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-4 py-12 sm:px-6 lg:px-8">
-            {/* Background Effects */}
-            <div className="absolute inset-0">
-                <div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-purple-500/20 blur-[120px]" />
-                <div className="absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-blue-500/20 blur-[120px]" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[800px] w-[800px] rounded-full bg-white/5 blur-[100px]" />
-            </div>
+        <main
+            className="min-h-screen flex"
+            style={{ background: "#0a1209" }}
+        >
+            {/* ── Left panel – branding ── */}
+            <div
+                className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 overflow-hidden"
+                style={{ background: "linear-gradient(160deg, #0d1b12 0%, #112316 60%, #0d2116 100%)" }}
+            >
+                {/* Decorative radial glow */}
+                <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                        background: "radial-gradient(ellipse 70% 60% at 30% 60%, rgba(82,183,136,0.12) 0%, transparent 70%)",
+                    }}
+                />
+                {/* Faint grid lines */}
+                <div
+                    className="absolute inset-0 pointer-events-none opacity-20"
+                    style={{
+                        backgroundImage:
+                            "linear-gradient(rgba(82,183,136,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(82,183,136,0.08) 1px, transparent 1px)",
+                        backgroundSize: "48px 48px",
+                    }}
+                />
 
-            <div className="relative z-10 w-full max-w-md space-y-8">
-                <div className="text-center">
-                    <h1 className="text-4xl font-extrabold tracking-tight text-white lg:text-5xl">
-                        Welcome back
-                    </h1>
-                    <p className="mt-4 text-lg text-white/60">
-                        Sign in to your account to continue
+                {/* Logo */}
+                <div className="relative z-10 flex items-center gap-2">
+                    <div
+                        className="w-9 h-9 rounded-xl flex items-center justify-center"
+                        style={{ background: "linear-gradient(135deg, #52b788, #2d6a4f)" }}
+                    >
+                        <Leaf className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-xl font-bold text-white">
+                        Root <span style={{ color: "#52b788" }}>Forms</span>
+                    </span>
+                </div>
+
+                {/* Central illustration text */}
+                <div className="relative z-10 space-y-6">
+                    <div
+                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border"
+                        style={{ background: "rgba(82,183,136,0.1)", borderColor: "rgba(82,183,136,0.3)", color: "#52b788" }}
+                    >
+                        <Trees className="w-3.5 h-3.5" />
+                        Nature-Inspired Forms
+                    </div>
+                    <h2 className="text-4xl font-extrabold text-white leading-tight">
+                        Forms that feel<br />
+                        <span style={{ color: "#52b788" }}>alive.</span>
+                    </h2>
+                    <p className="text-white/50 text-base leading-relaxed max-w-xs">
+                        Build breathtaking forms with forest, ocean, fire, and snow themes that leave a lasting impression.
+                    </p>
+
+                    {/* Feature pills */}
+                    <div className="flex flex-col gap-3 pt-2">
+                        {[
+                            "5 immersive nature themes",
+                            "10+ field types with validation",
+                            "Real-time analytics dashboard",
+                        ].map((f) => (
+                            <div key={f} className="flex items-center gap-3">
+                                <div
+                                    className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+                                    style={{ background: "rgba(82,183,136,0.15)", border: "1px solid rgba(82,183,136,0.35)" }}
+                                >
+                                    <Sprout className="w-3 h-3" style={{ color: "#52b788" }} />
+                                </div>
+                                <span className="text-sm text-white/60">{f}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Bottom quote */}
+                <div className="relative z-10">
+                    <p className="text-xs text-white/30 italic">
+                        "The best form builder with the most beautiful themes."
                     </p>
                 </div>
 
-                <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl sm:p-10">
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="email" className="text-sm font-medium text-white/80">Email</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    value={email}
-                                    onChange={(event) => setEmail(event.target.value)}
-                                    placeholder="jane@example.com"
-                                    className="h-12 border-white/10 bg-black/40 px-4 text-white placeholder:text-white/30 focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all"
-                                    required
-                                />
-                            </div>
+                {/* Decorative corner leaf shapes */}
+                <div
+                    className="absolute -bottom-16 -right-16 w-64 h-64 rounded-full opacity-10"
+                    style={{ background: "radial-gradient(circle, #52b788, transparent)" }}
+                />
+                <div
+                    className="absolute top-32 -right-8 w-32 h-32 rounded-full opacity-5"
+                    style={{ background: "#52b788" }}
+                />
+            </div>
 
-                            <div className="space-y-2">
-                                <Label htmlFor="password" className="text-sm font-medium text-white/80">Password</Label>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    value={password}
-                                    onChange={(event) => setPassword(event.target.value)}
-                                    placeholder="••••••••"
-                                    className="h-12 border-white/10 bg-black/40 px-4 text-white placeholder:text-white/30 focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all"
-                                    required
-                                />
-                            </div>
+            {/* ── Right panel – form ── */}
+            <div
+                className="w-full lg:w-1/2 flex items-center justify-center px-6 py-12"
+                style={{ background: "#0a1209" }}
+            >
+                <div className="w-full max-w-sm space-y-8">
+                    {/* Mobile logo */}
+                    <div className="flex lg:hidden items-center gap-2 justify-center">
+                        <div
+                            className="w-8 h-8 rounded-lg flex items-center justify-center"
+                            style={{ background: "linear-gradient(135deg, #52b788, #2d6a4f)" }}
+                        >
+                            <Leaf className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="text-lg font-bold text-white">
+                            Root <span style={{ color: "#52b788" }}>Forms</span>
+                        </span>
+                    </div>
+
+                    <div>
+                        <h1 className="text-3xl font-bold text-white tracking-tight">Welcome back</h1>
+                        <p className="mt-2 text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
+                            Sign in to continue to your dashboard
+                        </p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="space-y-1.5">
+                            <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.5)" }}>
+                                Email
+                            </Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="you@example.com"
+                                required
+                                className="h-11 rounded-xl text-white placeholder:text-white/20 transition-all"
+                                style={{
+                                    background: "rgba(27,47,35,0.5)",
+                                    border: "1px solid rgba(45,106,79,0.4)",
+                                    outline: "none",
+                                }}
+                                onFocus={(e) => (e.target.style.borderColor = "rgba(82,183,136,0.7)")}
+                                onBlur={(e) => (e.target.style.borderColor = "rgba(45,106,79,0.4)")}
+                            />
                         </div>
 
-                        {error ? (
-                            <div className="rounded-lg bg-red-500/10 p-4 border border-red-500/20">
-                                <p className="text-sm text-red-400 text-center font-medium">{error.message}</p>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="password" className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.5)" }}>
+                                Password
+                            </Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="••••••••"
+                                required
+                                className="h-11 rounded-xl text-white placeholder:text-white/20 transition-all"
+                                style={{
+                                    background: "rgba(27,47,35,0.5)",
+                                    border: "1px solid rgba(45,106,79,0.4)",
+                                }}
+                                onFocus={(e) => (e.target.style.borderColor = "rgba(82,183,136,0.7)")}
+                                onBlur={(e) => (e.target.style.borderColor = "rgba(45,106,79,0.4)")}
+                            />
+                        </div>
+
+                        {error && (
+                            <div
+                                className="rounded-xl p-3 text-sm text-center font-medium"
+                                style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.25)", color: "#f87171" }}
+                            >
+                                {error.message}
                             </div>
-                        ) : null}
-                        {isSuccess ? (
-                            <div className="rounded-lg bg-emerald-500/10 p-4 border border-emerald-500/20">
-                                <p className="text-sm text-emerald-400 text-center font-medium">Signed in successfully.</p>
-                            </div>
-                        ) : null}
+                        )}
 
                         <Button
                             type="submit"
-                            className="h-12 w-full bg-white text-base font-semibold text-black hover:bg-white/90 transition-colors"
                             disabled={isPending}
+                            className="h-11 w-full rounded-xl text-sm font-semibold transition-all"
+                            style={{ background: "linear-gradient(135deg, #52b788, #40916c)", color: "#0a1209" }}
                         >
-                            {isPending ? "Signing in..." : "Sign in"}
+                            {isPending ? "Signing in…" : "Sign in"}
                         </Button>
                     </form>
 
-                    <div className="relative mt-8">
-                        <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-white/10" />
-                        </div>
-                        <div className="relative flex justify-center text-sm font-medium">
-                            <span className="bg-black/80 px-4 text-white/50 backdrop-blur-md rounded-full border border-white/10 py-1">Or continue with</span>
-                        </div>
+                    {/* Divider */}
+                    <div className="relative flex items-center gap-4">
+                        <div className="flex-1 h-px" style={{ background: "rgba(45,106,79,0.35)" }} />
+                        <span className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>or</span>
+                        <div className="flex-1 h-px" style={{ background: "rgba(45,106,79,0.35)" }} />
                     </div>
 
-                    <div className="mt-8">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={handleDemoLogin}
-                            disabled={isPending}
-                            className="h-12 w-full border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white transition-all duration-200"
-                        >
-                            Sign in with Demo Account
-                        </Button>
-                    </div>
+                    {/* Demo login */}
+                    <button
+                        type="button"
+                        onClick={handleDemoLogin}
+                        disabled={isPending}
+                        className="w-full h-11 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 group"
+                        style={{
+                            background: "rgba(27,47,35,0.6)",
+                            border: "1px solid rgba(45,106,79,0.5)",
+                            color: "#95d5b2",
+                        }}
+                        onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(82,183,136,0.7)")}
+                        onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(45,106,79,0.5)")}
+                    >
+                        <Sprout className="w-4 h-4" />
+                        Try with Demo Account
+                    </button>
 
-                    <p className="mt-8 text-center text-sm text-white/60">
+                    <p className="text-center text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>
                         Don't have an account?{" "}
-                        <Link href="/signup" className="font-semibold text-white hover:text-white/80 transition-colors">
-                            Sign up
+                        <Link
+                            href="/signup"
+                            className="font-semibold transition-colors"
+                            style={{ color: "#52b788" }}
+                        >
+                            Sign up free
                         </Link>
                     </p>
                 </div>

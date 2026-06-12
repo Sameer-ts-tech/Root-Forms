@@ -240,19 +240,19 @@ export default function FormBuilderPage({ params }: { params: Promise<{ id: stri
                             </button>
                         </div>
 
-                        <Button asChild size="sm" variant="ghost" className="text-white/70 hover:text-black h-8 gap-1.5">
+                        <Button asChild size="sm" variant="ghost" className="text-white/70 hover:text-white h-8 gap-1.5">
                             <Link href={`/form/${formId}?preview=true`} target="_blank">
                                 <Eye className="w-3.5 h-3.5" />Preview
                             </Link>
                         </Button>
 
-                        <Button asChild size="sm" variant="ghost" className="text-white/70 hover:text-black h-8 gap-1.5">
+                        <Button asChild size="sm" variant="ghost" className="text-white/70 hover:text-white h-8 gap-1.5">
                             <Link href={`/dashboard/forms/${formId}/share`}>
                                 <Share2 className="w-3.5 h-3.5" />Share
                             </Link>
                         </Button>
 
-                        <Button asChild size="sm" variant="ghost" className="text-white/70 hover:text-black h-8 gap-1.5">
+                        <Button asChild size="sm" variant="ghost" className="text-white/70 hover:text-white h-8 gap-1.5">
                             <Link href={`/dashboard/forms/${formId}/responses`}>
                                 <FileText className="w-3.5 h-3.5" />Responses
                             </Link>
