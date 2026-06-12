@@ -268,7 +268,7 @@ export default function PublicFormPage({ params, searchParams }: { params: Promi
 
                         {currentField && (
                             <div className="relative p-8 rounded-3xl border mb-4 backdrop-blur-2xl shadow-2xl transition-all" style={{ background: t.surface, borderColor: t.border }}>
-                                {t.id === "snow" && <img src="/snow_patch.png" alt="" className="absolute -top-3 left-0 w-full h-auto opacity-90 pointer-events-none z-10 drop-shadow-lg" />}
+                                {t.id === "snow" && <img src="/snow_patch.png" alt="" className="absolute -top-3 left-0 w-full h-10 opacity-90 pointer-events-none z-10 drop-shadow-lg" />}
                                 <label className="block text-xl font-semibold mb-3" style={{ color: t.text }}>
                                     {currentField.label}
                                     {currentField.isRequired && <span className="ml-1" style={{ color: t.accent }}>*</span>}
