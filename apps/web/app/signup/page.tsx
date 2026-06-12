@@ -28,7 +28,8 @@ export default function SignupPage() {
             password,
         });
 
-        router.push("/dashboard/forms");
+        // Hard navigate so React Query starts fresh with the authenticated cookie
+        window.location.href = "/dashboard/forms";
     };
 
     return (

@@ -17,7 +17,6 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const router = useRouter();
     const { user, isFetched } = useUser();
-    const utils = trpc.useUtils();
 
     // Auth guard: redirect to signin if user is not authenticated
     useEffect(() => {
@@ -34,9 +33,9 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         } catch (e) {
             console.error(e);
         } finally {
-            // Invalidate user cache so the navbar updates immediately
-            await utils.auth.getLoggedInUserInfo.invalidate();
-            router.push("/");
+            // Hard reload to fully wipe all in-memory React Query cache.
+            // A soft router.push would leave stale user data in memory.
+            window.location.href = "/";
         }
     };
 

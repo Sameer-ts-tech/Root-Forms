@@ -8,16 +8,31 @@ import { Toaster } from "~/components/ui/sonner";
 import { trpc } from "~/trpc/client";
 import { createTRPCHttpBatchClientClient } from "~/trpc/create-client";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnMount: true,
-      staleTime: Infinity,
+const createQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
+        staleTime: 30 * 1000, // 30 seconds — auth state stays fresh
+      },
     },
-  },
-});
+  });
+
+let clientQueryClient: QueryClient | undefined = undefined;
+
+function getQueryClient() {
+  if (typeof window === "undefined") {
+    // Server: always create a new query client
+    return createQueryClient();
+  }
+  // Browser: reuse the same client across renders
+  if (!clientQueryClient) clientQueryClient = createQueryClient();
+  return clientQueryClient;
+}
 
 export const GlobalProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const queryClient = getQueryClient();
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [createTRPCHttpBatchClientClient()],

@@ -26,7 +26,8 @@ export default function SigninPage() {
             password,
         });
 
-        router.push("/dashboard/forms");
+        // Hard navigate so React Query starts fresh with the authenticated cookie
+        window.location.href = "/dashboard/forms";
     };
 
     const handleDemoLogin = async () => {
@@ -40,7 +41,8 @@ export default function SigninPage() {
             password: demoPassword,
         });
         
-        router.push("/dashboard/forms");
+        // Hard navigate so React Query starts fresh with the authenticated cookie
+        window.location.href = "/dashboard/forms";
     };
 
     return (
