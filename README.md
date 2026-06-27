@@ -1,135 +1,94 @@
-# Turborepo starter
+# Chai Forms Platform
 
-This Turborepo starter is maintained by the Turborepo core team.
+This repository is a full-stack, monorepo-based platform for building, managing, and interacting with dynamic forms. It uses a modern web stack to provide a robust, type-safe, and scalable architecture.
 
-## Using this example
+## Overview
 
-Run the following command:
+Root Forms allows users to:
+- **Create Forms**: Build complex forms with multiple fields and custom themes.
+- **Collect Submissions**: Share forms and gather user responses.
+- **Analyze Data**: View and manage form submissions through a dedicated dashboard.
 
-```sh
-npx create-turbo@latest
-```
+## 🏗️ Architecture & How It Works
 
-## What's inside?
+This project is structured as a **Turborepo** monorepo, separating concerns into individual applications and packages. This ensures modularity, reusability, and end-to-end type safety.
 
-This Turborepo includes the following packages/apps:
+### 1. The Frontend App (`apps/web`)
+- **Technology**: Built with **Next.js** (App Router), React, and Tailwind CSS.
+- **Role**: This is the main user interface. It contains the form builder, the dashboard for viewing responses, explore pages, and the publicly accessible pages for filling out forms.
+- **How it works**: The frontend uses `@trpc/client` to make strictly-typed API calls to the backend. It also utilizes custom hooks to manage form state and UI components.
 
-### Apps and Packages
+### 2. The API Layer (`packages/trpc`)
+- **Technology**: Built with **tRPC** and **Zod**.
+- **Role**: Serves as the bridge between the frontend and the business logic. It defines the API contracts (routes, inputs, and outputs).
+- **How it works**: 
+  - A frontend component requests data (e.g., "get form by ID").
+  - The request hits a tRPC route defined here.
+  - The route validates the incoming data using Zod schemas.
+  - If valid, it delegates the actual work to the **Services Layer**.
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### 3. The Business Logic (`packages/services`)
+- **Technology**: Pure TypeScript.
+- **Role**: Contains the core business rules of the application. 
+- **How it works**: Instead of putting database calls directly in the API layer, all core logic (e.g., validating a form submission, checking permissions, formatting data) lives here. The services use the Database package to read/write data.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### 4. The Database Layer (`packages/database`)
+- **Technology**: **Drizzle ORM** and PostgreSQL.
+- **Role**: Manages all data persistence. 
+- **How it works**: Defines the database schema using Drizzle (Users, Forms, FormFields, FormSubmissions, FormThemes). It provides a typed client to the Services layer for executing SQL queries safely.
 
-### Utilities
+### 🔄 The End-to-End Flow (Example: Submitting a form)
+1. A user clicks "Submit" on the Next.js `web` app.
+2. The `web` app calls the `submitForm` tRPC mutation.
+3. The `trpc` package validates the payload against a Zod schema.
+4. The `trpc` package calls the `createSubmission` function in the `services` package.
+5. The `services` package runs any necessary business logic, then uses the `database` package's Drizzle client to insert the record into PostgreSQL.
+6. The result is returned all the way back up the chain to the frontend, with complete type safety at every step.
 
-This Turborepo has some additional tools already setup for you:
+---
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+## 🚀 Getting Started
 
-### Build
+This project uses [pnpm](https://pnpm.io/) for dependency management.
 
-To build all apps and packages, run the following command:
+### Prerequisites
+- Node.js (v18+)
+- pnpm (v9+)
+- Docker (for local PostgreSQL database)
 
-```
-cd my-turborepo
+### Installation
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+1. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
+2. **Start the local database:**
+   This will spin up a PostgreSQL instance via Docker Compose.
+   ```bash
+   pnpm db:up
+   ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+3. **Initialize the database:**
+   Generate the Drizzle ORM client and run migrations to create the tables.
+   ```bash
+   pnpm db:generate
+   pnpm db:migrate
+   ```
+   *(Optional)* To visualize and manage your database data locally, you can use Drizzle Studio:
+   ```bash
+   pnpm db:studio
+   ```
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+4. **Start the development server:**
+   Launch the Next.js frontend and tRPC backend in development mode.
+   ```bash
+   pnpm dev
+   ```
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+## 🛠️ Available Scripts (Root)
+- `pnpm dev`: Starts the development servers.
+- `pnpm build`: Builds all apps and packages for production.
+- `pnpm lint`: Runs ESLint checks across the repository.
+- `pnpm format`: Formats code using Prettier.
+- `pnpm check-types`: Runs TypeScript type checking.
